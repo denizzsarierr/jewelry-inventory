@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jewelry Inventory Manager</title>
+    <style>
+        body { font-family: Arial; max-width: 900px; margin: 40px auto; background: #f8f8f8; }
+        h1 { color: #9a751b; }
+        input, select, button { padding: 10px; margin: 5px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #eee; }
+        button { cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Jewelry Inventory Manager</h1>
+
+    <h2>Add New Jewelry</h2>
+    <form action="/add" method="POST">
+        <input type="text" name="name" placeholder="Product Name" required>
+        <select name="category">
+            <option>Ring</option>
+            <option>Necklace</option>
+            <option>Bracelet</option>
+            <option>Earrings</option>
+        </select>
+        <input type="number" name="price" placeholder="Price ($)" min="0.01" step="0.01" required>
+        <input type="number" name="quantity" placeholder="Quantity" min="1" required>
+        <button type="submit">Add Jewelry</button>
+    </form>
+
+    <h2>Inventory</h2>
+    <table>
+        <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        {% for item in jewelry %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>${{ "%.2f"|format(item.price) }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+                <form action="/delete/{{ loop.index0 }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Total Inventory Value: ${{ "%.2f"|format(total_value) }}</h2>
+</body>
+</html>
